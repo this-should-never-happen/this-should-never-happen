@@ -1,0 +1,29 @@
+#!/usr/bin/wml
+
+# This is a simple WML[0] script to print "Hello World!" using as many
+;;; WML passes as possible. This currently does not do anything with
+<: # passes 7-9, but patches are welcome! :>
+{#COMMENT#: :##}
+m4_dnl [0] http://thewml.org/
+
+{: [[s/$/!/]]
+{#STRING#}
+:}
+
+$(string=Hello World)
+
+<define-tag hello-world endtag=required whitespace=delete>
+  <set-var string="$(string)" />
+
+  <:
+    my $string = "<get-var string />";
+
+    print "m4_quotes\n";
+    print "m4_define(`string', `$string')\n";
+    print "m4_noquotes\n";
+  :>
+
+  string
+</define-tag>
+
+{#STRING#:<hello-world />:##}
