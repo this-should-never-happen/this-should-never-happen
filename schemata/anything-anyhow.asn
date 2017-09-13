@@ -1,0 +1,110 @@
+AnythingAnyhow DEFINITIONS EXPLICIT TAGS ::= BEGIN
+
+Version ::= INTEGER (0..0)
+
+-- This sequence is intended to be able to encode any data, in any way.
+AnythingAnyhow ::= SEQUENCE {
+  -- Version of AnythingAnyhow used to encode this data.
+  version Version,
+
+  -- Encoding method used, e.g., ASN.1, JSON, XML, etc.
+  encoding OBJECT IDENTIFIER,
+
+  -- Version of the encoding method. The interpretation of this version string
+  -- is dependent on the encoding method. Improper use of this field MAY result
+  -- in undefined behavior.
+  encodingVersion [0] BIT STRING OPTIONAL,
+
+  -- Schema used to encode/decode the data. If present, this field MUST be a
+  -- URI that identifies an appropriate schema for the above encoding. An
+  -- individual encoding method MAY specify that this field is either required or
+  -- forbidden, for that encoding method.
+  schema [1] OCTET STRING OPTIONAL,
+
+  -- The encoded data.
+  data BIT STRING }
+
+
+-- Useful namespace, used below.
+--
+-- An easy way to add new child OIDs is with the python one-liner
+-- uuid.uuid4().int.
+id-uuid OBJECT IDENTIFIER ::= { 2 25 }
+
+
+-- The rest of this file is for individual ways to encode data.
+
+-- Encode a single value, null. Schema is forbidden. Data must have length zero.
+id-encodingNull OBJECT IDENTIFIER ::=
+  { id-uuid 209545269663677658031106311873148485085 }
+
+-- Raw data. Schema is forbidden.
+id-encodingRaw OBJECT IDENTIFIER ::=
+  { id-uuid 308773587942489073598771040963107614718 }
+
+-- Yo dawg, I heard you like ASN.1, so we put ASN.1 in your ASN.1 so you can
+-- stare at huge amounts of documentation while you stare at huge amounts of
+-- documentation.
+--
+-- Do not use id-encodingAsn1 itself; use its children.
+--
+-- Schema is required, and must point to an ASN.1 schema file. It MAY point to
+-- this file itself.
+id-encodingAsn1 OBJECT IDENTIFIER ::=
+  { id-uuid 216180565370453161864975372537693372747 }
+id-encodingAsn1-der OBJECT IDENTIFIER ::= { id-encodingAsn1 1 }
+id-encodingAsn1-ber OBJECT IDENTIFIER ::= { id-encodingAsn1 2 }
+id-encodingAsn1-cer OBJECT IDENTIFIER ::= { id-encodingAsn1 3 }
+id-encodingAsn1-xer OBJECT IDENTIFIER ::= { id-encodingAsn1 4 }
+id-encodingAsn1-cxer OBJECT IDENTIFIER ::= { id-encodingAsn1 5 }
+id-encodingAsn1-exer OBJECT IDENTIFIER ::= { id-encodingAsn1 6 }
+id-encodingAsn1-per OBJECT IDENTIFIER ::= { id-encodingAsn1 7 }
+id-encodingAsn1-uper OBJECT IDENTIFIER ::= { id-encodingAsn1 8 }
+id-encodingAsn1-cper OBJECT IDENTIFIER ::= { id-encodingAsn1 9 }
+id-encodingAsn1-oer OBJECT IDENTIFIER ::= { id-encodingAsn1 10 }
+id-encodingAsn1-coer OBJECT IDENTIFIER ::= { id-encodingAsn1 11 }
+id-encodingAsn1-jer OBJECT IDENTIFIER ::= { id-encodingAsn1 12 }
+id-encodingAsn1-gser OBJECT IDENTIFIER ::= { id-encodingAsn1 13 }
+
+-- https://tools.ietf.org/html/rfc7049
+id-encodingCbor OBJECT IDENTIFIER ::=
+  { id-uuid 314665064307459602453862488980538554713 }
+
+-- https://tools.ietf.org/html/rfc7159
+id-encodingJson OBJECT IDENTIFIER ::=
+  { id-uuid 154806932498646119230691685241520439124 }
+
+-- http://www.w3.org/TR/xml/
+--
+-- WARNING: Dragons.
+id-encodingXml OBJECT IDENTIFIER ::=
+  { id-uuid 35751177029418654129328790543819638683 }
+
+-- http://www.yaml.org/
+id-encodingYaml OBJECT IDENTIFIER ::=
+  { id-uuid 51804497851174175203389417379764280745 }
+
+-- SGML. Abandon all hope.
+id-encodingSgml OBJECT IDENTIFIER ::=
+  { id-uuid 48363642628252105672856500177050418524 }
+
+-- This is not a real encoding, but rather a way to avoid using an OID if you
+-- don't feel like it. The schema MUST be present, and in contradiction of the
+-- definition of the field, the schema MUST be a MIME type instead of a URI. The
+-- data is to be interpreted as data of the specified MIME type.
+id-encodingMime OBJECT IDENTIFIER ::=
+  { id-uuid 22749798928748393285115348517126428836 }
+
+
+-- Cheat codes!! (Remember when I said "the rest of this file is for individual
+-- ways to encode data"? I lied.)
+--
+-- AnythingAnyhow recursively containing more AnythingAnyhow to a depth of 42:
+-- free imaginary towel.
+--
+-- AnythingAnyhow containing JSONx (JSON-in-XML), containing SGML in a JSON
+-- string: nothing.
+--
+-- rm -f anything-anyhow.asn: satisfaction.
+
+END
