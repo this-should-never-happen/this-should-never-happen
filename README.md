@@ -10,6 +10,11 @@ Yes, exactly, thank you!
 These questions have not been frequently asked.
 
 
+### Should this ever happen?
+
+Absolutely not. This should never happen.
+
+
 ### Should I send a pull request to this repository?
 
 Honestly, probably not, it's a waste of time. That said, please do anyway! The
